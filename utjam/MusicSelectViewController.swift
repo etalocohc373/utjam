@@ -11,19 +11,19 @@ import UIKit
 class MusicSelectViewController: UIViewController {
     var bgmTag:String = ""
     
-    override func viewDidLoad() { //一回しか呼ばれてない
+    override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func buttonTapped(sender: UIButton) {
+    @IBAction func buttonTapped(sender : UIButton) {
         bgmTag = "\(sender.tag)"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "toSingleMultiSelectViewController") {
             let vc: SingleMultiSelectViewController = (segue.destination as? SingleMultiSelectViewController)!
-            // Send button.tag to bgmTag in ViewController
+            // Send button.tag to bgmTag in next viewController.
             vc.bgmTag = self.bgmTag
         }
     }

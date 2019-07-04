@@ -13,7 +13,7 @@
         <!--Play Scale Pad View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjam" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -244,7 +244,7 @@
         <!--Music Select View Controller-->
         <scene sceneID="Pt1-tR-sqt">
             <objects>
-                <viewController id="1wA-H6-70H" customClass="MusicSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
+                <viewController id="1wA-H6-70H" customClass="MusicSelectViewController" customModule="utjam" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vfQ-Zn-lcP">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -259,7 +259,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="200" height="30"/>
                                                 <state key="normal" title="The Chicken"/>
                                                 <connections>
-                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="SB7-68-Gbo"/>
+                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="3Ae-qg-pOW"/>
                                                     <segue destination="Vnd-Kl-mga" kind="presentation" identifier="toSingleMultiSelectViewController" id="XGo-50-NbU"/>
                                                 </connections>
                                             </button>
@@ -267,7 +267,7 @@
                                                 <rect key="frame" x="0.0" y="30" width="200" height="30"/>
                                                 <state key="normal" title="Isn't She Lovely"/>
                                                 <connections>
-                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="eAB-35-aOO"/>
+                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="P4i-hC-86k"/>
                                                     <segue destination="Vnd-Kl-mga" kind="presentation" identifier="toSingleMultiSelectViewController" id="ftU-os-elv"/>
                                                 </connections>
                                             </button>
@@ -275,7 +275,7 @@
                                                 <rect key="frame" x="0.0" y="60" width="200" height="30"/>
                                                 <state key="normal" title="Just the Two of Us"/>
                                                 <connections>
-                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="XAg-nY-zCa"/>
+                                                    <action selector="buttonTappedWithSender:" destination="1wA-H6-70H" eventType="touchUpInside" id="0YZ-Lq-Hvt"/>
                                                     <segue destination="Vnd-Kl-mga" kind="presentation" identifier="toSingleMultiSelectViewController" id="zyu-Ng-Y9O"/>
                                                 </connections>
                                             </button>
@@ -356,7 +356,7 @@
         <!--Keyboard Type Select View Controller-->
         <scene sceneID="lZl-FG-WdT">
             <objects>
-                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
+                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjam" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9vY-Ke-pfo">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -410,7 +410,7 @@
         <!--Single or Multi Select View Controller-->
         <scene sceneID="Bal-L3-BQ2">
             <objects>
-                <viewController id="Vnd-Kl-mga" userLabel="Single or Multi Select View Controller" customClass="SingleMultiSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
+                <viewController id="Vnd-Kl-mga" userLabel="Single or Multi Select View Controller" customClass="SingleMultiSelectViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rz2-Ya-l4k">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -454,10 +454,10 @@
             </objects>
             <point key="canvasLocation" x="27" y="-958"/>
         </scene>
-        <!--Pre Play Full Keyboard View Controller-->
+        <!--Play Full Keyboard View Controller-->
         <scene sceneID="uYa-Rt-F5Q">
             <objects>
-                <viewController id="lKk-gW-VAV" customClass="Pre_PlayFullKeyboardViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="lKk-gW-VAV" customClass="PlayFullKeyboardViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wbp-rZ-FTj">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

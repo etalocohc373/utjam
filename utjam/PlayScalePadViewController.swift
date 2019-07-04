@@ -40,23 +40,26 @@ class PlayScalePadViewController: UIViewController {
     var octaveForLower:Int = 0 //0<4 for octave 1~5
     var bgmTag:String? //passed by MusicSelectView.
     var bluetoothTag:String? //passed by MusicSelectView.
-    var pathUtilityPlist:Optional<Any> = nil
-    var bgmNSDictPre:NSDictionary = [:]
-    var bgmNSDict:NSDictionary = [:]
     var bpm:Float = 0.0
     var beat:Float = 0.0
     var numberOfBar:Int = 0
     var barNow:Int = 0
+    var pathUtilityPlist:Optional<Any> = nil
+    var bgmNSDictPre:NSDictionary = [:]
+    var bgmNSDict:NSDictionary = [:]
     var scalesNSDict:NSDictionary = [:]
     var pianoKeysNSArray:NSArray = []
     var uiParametersNSDict:NSDictionary = [:]
     
-    override func viewDidLoad() { // なんか二回呼ばれるんですけど
+    override func viewDidLoad() {
         super.viewDidLoad() 
         // Do any additional setup after loading the view.
-        setVariables()
-        prepareSound()
-        startBGM()
+        setVariables() //Initialize the member variables.
+        prepareSound() // Set the sound files activated.
+        startBGM()  // Start the bgm file.
+        
+        /* Start timer to controll the change of scales along the bars.
+         relodeSoundKey will be called when the bar changes. */
         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(beat*(60/bpm)), repeats: true, block: { (timer) in
             if self.barNow == self.numberOfBar{
                 timer.invalidate()
@@ -96,13 +99,15 @@ class PlayScalePadViewController: UIViewController {
 
     
     @IBAction func octaveHigherTouchDown(_ sender: UIButton) {
+    /* Called to make the octave one higher when users push buttonChangeHigher */
         print(octaveForLower)
-        if octaveForLower <= 4{
+        if octaveForLower <= 5{
             octaveForLower += 1
             self.relodeSoundKey()
         }
     }
     @IBAction func octaveLowerTouchDown(_ sender: UIButton) {
+    /* Called to make the octave one lower when users push buttonChangeLower */
         print(octaveForLower)
         if octaveForLower >= 1{
             octaveForLower -= 1
@@ -110,34 +115,33 @@ class PlayScalePadViewController: UIViewController {
         }
     }
     @IBAction func keyboardTouchDown(_ sender: UIButton) {
-        print(sender.tag)
-        let keynum = sender.tag
-        audioPlayers[keynum].currentTime = 0
-        audioPlayers[keynum].play()
+    /* play a sound file and emphasize the border of button to show user its activated status when users push a key button. */
+        audioPlayers[sender.tag].currentTime = 0
+        audioPlayers[sender.tag].play()
+        sender.layer.borderWidth = 3
     }
     @IBAction func keyboardTouchUp(_ sender: UIButton) {
-        let keynum = sender.tag
-        //audioPlayers[keynum].stop()
+    /* Stop a sound file and restore the border of button to show user its deactivated status when users push a key button. */
+        //audioPlayers[sender.tag].stop() // Commented out now because this makes some noize.
+        sender.layer.borderWidth = 1
     }
     @IBAction func keyboardDragEnter(_ sender: UIButton) {
-        print("enter")
+    /* Play a sound file and emphasize the border of button to show user its active status when users drag into a key button. */
         let keynum = sender.tag
-        audioPlayers[keynum].currentTime = 0
-        audioPlayers[keynum].play()
+        audioPlayers[sender.tag].currentTime = 0
+        audioPlayers[sender.tag].play()
+        sender.layer.borderWidth = 3
     }
-    @IBAction func keyboardDragInside(_ sender: UIButton) {
-        print("inside")
-        let keynum = sender.tag
-        audioPlayers[keynum].currentTime = 0
-        audioPlayers[keynum].play()
-    }
+
     @IBAction func keyboardDragExit(_ sender: UIButton) {
-        print("exit")
-        let keynum = sender.tag
-        audioPlayers[keynum].stop()
+    /* Stop a sound file and restore the border of button to show user its deactivated status when users drug out of a key button. */
+        // audioPlayers[sender.tag].stop() // Commented out now because this makes some noize.
+        sender.layer.borderWidth = 1
     }
 
     func prepareSound(){
+    /* Activate the sound files for immediate play when the user push keys.
+     When a key button is pushed by user, the sound with index of the key's tab will be played. */
         var audioPlayer: AVAudioPlayer! = nil
 
         for keyNSTaggedPointerString in pianoKeysNSArray{
@@ -157,6 +161,7 @@ class PlayScalePadViewController: UIViewController {
     }
 
     func startBGM(){
+    /* Start BGM */
         let bgmFileName = bgmNSDict.object(forKey:String("title")) as! String
         print(bgmFileName)
         let bgmNSURL = NSURL(fileURLWithPath: Bundle.main.path(forResource: "bgm/\(String(describing: bgmFileName))", ofType: "mp3")!)
@@ -172,6 +177,8 @@ class PlayScalePadViewController: UIViewController {
     }
 
     func relodeSoundKey(){
+    /* Relode the scale and reset the note of each pad when the ordered scale is changed or buttonChangeOctave is pressed.
+        Now this works little too slow. Please improve if its possible. */
         let scaleNow:String = (bgmNSDict.object(forKey:"scalesList") as! NSArray)[barNow-1] as! String
         // Load notes array for barNow-scale from scalesDict
         let soundNSArrayInScaleNow: NSArray = scalesNSDict.object(forKey:scaleNow) as! NSArray
@@ -181,19 +188,20 @@ class PlayScalePadViewController: UIViewController {
             let sound:Int = soundNSString as! Int
             soundListInScaleNow.append(sound)
         }
-        // Adjust the notes in soundListInScaleNow to the octaves of keyboards.
+        // Adjust the notes in soundListInScaleNow to the octaves of pads.
         listSoundKeyLower = soundListInScaleNow.map{$0+(12*octaveForLower)}
         listSoundKeyHigher = listSoundKeyLower.map{$0+12}
-        // Set each note onto each key of keyoards.
+        // Make lists of the button instances.
         let keyboardLowerList:[UIButton] = [self.keyboardLower1, self.keyboardLower2, self.keyboardLower3, self.keyboardLower4, self.keyboardLower5, self.keyboardLower6, self.keyboardLower7, self.keyboardLower8]
         let keyboardUpperList:[UIButton] = [self.keyboardUpper1, self.keyboardUpper2, self.keyboardUpper3, self.keyboardUpper4, self.keyboardUpper5, self.keyboardUpper6, self.keyboardUpper7, self.keyboardUpper8]
+        // Initialize the button instances' tag with 88, which matches the index of Empty sound file.
         for keyboard in keyboardLowerList{
             keyboard.tag = 88
-            //色も変えたいよね
         }
         for keyboard in keyboardUpperList{
             keyboard.tag = 88
         }
+        // Set the note on each pad.
         for (indice, soundKey) in listSoundKeyLower.enumerated(){
           if 0 <= soundKey && soundKey <= 87{
             keyboardLowerList[indice].tag = soundKey
