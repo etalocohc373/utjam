@@ -12,7 +12,7 @@ class KeyboardTypeSelectViewController: UIViewController {
     var bgmTag:String?
     var bluetoothTag:String?
     
-    override func viewDidLoad() { //これも二回呼ばれてる
+    override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -24,18 +24,16 @@ class KeyboardTypeSelectViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "toPlayFullKeyboardViewController") {
-            let vc: Pre_PlayFullKeyboardViewController = (segue.destination as? Pre_PlayFullKeyboardViewController)!
-            // Send bgmTag to bgmTag in ViewController
+            let vc: PlayFullKeyboardViewController = (segue.destination as? PlayFullKeyboardViewController)!
+            // Send button.tag to bgmTag in next viewController.
             vc.bgmTag = self.bgmTag
             vc.bluetoothTag = self.bluetoothTag
-            //self.dismiss(animated: true, completion: nil)
         }
         if (segue.identifier == "toPlayScalePadViewController") {
             let vc: PlayScalePadViewController = (segue.destination as? PlayScalePadViewController)!
-            // Send bgmTag to bgmTag in ViewController
-            vc.bgmTag = self.bgmTag!
+            // Send button.tag to bgmTag in next viewController.
+            vc.bgmTag = self.bgmTag
             vc.bluetoothTag = self.bluetoothTag
-            //self.dismiss(animated: true, completion: nil)
         }
     }
     

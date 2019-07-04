@@ -26,10 +26,9 @@ class SingleMultiSelectViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc: KeyboardTypeSelectViewController = (segue.destination as? KeyboardTypeSelectViewController)!
-        // Send bgmTag to bgmTag in ViewController
+        // Send bgmTag and bluetoothTag to next ViewController
         vc.bgmTag = self.bgmTag
         vc.bluetoothTag = self.bluetoothTag
-        //self.dismiss(animated: true, completion: nil)
         
     }
     

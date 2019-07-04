@@ -8,11 +8,14 @@
 
 import UIKit
 import AVFoundation
+import MultipeerConnectivity
 
-class PlayFullKeyboardViewController: UIViewController {
+class PlayFullKeyboardViewController: UIViewController{
+
     var audioPlayers:[AVAudioPlayer] = []
     var bgmPlayer: AVAudioPlayer! = nil
     var bgmTag:String? //passed by MusicSelectView.
+    var bluetoothTag:String? //passed by MusicSelectView.
     var bpm:Float = 0.0
     var beat:Float = 0.0
     var numberOfBar:Int = 0
@@ -21,26 +24,139 @@ class PlayFullKeyboardViewController: UIViewController {
     var bgmNSDictPre:NSDictionary = [:]
     var bgmNSDict:NSDictionary = [:]
     var scalesNSDict:NSDictionary = [:]
-    var pianoKeysNSArray:NSArray = []
+    var notesNSArray:NSArray = []
     var uiParametersNSDict:NSDictionary = [:]
     var keyboardButtonList:[UIButton] = []
-    let keyboardScrollView = UIScrollView()
-    let whiteStackView = UIStackView()
-    let blackStackView = UIStackView()
-
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    
+    @IBOutlet weak var C0: UIButton!
+    @IBOutlet weak var D0: UIButton!
+    @IBOutlet weak var E0: UIButton!
+    @IBOutlet weak var F0: UIButton!
+    @IBOutlet weak var G0: UIButton!
+    @IBOutlet weak var A1: UIButton!
+    @IBOutlet weak var B1: UIButton!
+    @IBOutlet weak var Cs0: UIButton!
+    @IBOutlet weak var Ds0: UIButton!
+    @IBOutlet weak var Fs0: UIButton!
+    @IBOutlet weak var Gs0: UIButton!
+    @IBOutlet weak var As1: UIButton!
+    @IBOutlet weak var C1: UIButton!
+    @IBOutlet weak var Cs1: UIButton!
+    @IBOutlet weak var D1: UIButton!
+    @IBOutlet weak var Ds1: UIButton!
+    @IBOutlet weak var E1: UIButton!
+    @IBOutlet weak var F1: UIButton!
+    @IBOutlet weak var Fs1: UIButton!
+    @IBOutlet weak var Gs1: UIButton!
+    @IBOutlet weak var G1: UIButton!
+    @IBOutlet weak var A2: UIButton!
+    @IBOutlet weak var As2: UIButton!
+    @IBOutlet weak var B2: UIButton!
+    @IBOutlet weak var C2: UIButton!
+    @IBOutlet weak var Cs2: UIButton!
+    @IBOutlet weak var D2: UIButton!
+    @IBOutlet weak var Ds2: UIButton!
+    @IBOutlet weak var E2: UIButton!
+    @IBOutlet weak var F2: UIButton!
+    @IBOutlet weak var Fs2: UIButton!
+    @IBOutlet weak var G2: UIButton!
+    @IBOutlet weak var Gs2: UIButton!
+    @IBOutlet weak var A3: UIButton!
+    @IBOutlet weak var As3: UIButton!
+    @IBOutlet weak var B3: UIButton!
+    @IBOutlet weak var C3: UIButton!
+    @IBOutlet weak var Cs3: UIButton!
+    @IBOutlet weak var D3: UIButton!
+    @IBOutlet weak var Ds3: UIButton!
+    @IBOutlet weak var E3: UIButton!
+    @IBOutlet weak var F3: UIButton!
+    @IBOutlet weak var Fs3: UIButton!
+    @IBOutlet weak var G3: UIButton!
+    @IBOutlet weak var Gs3: UIButton!
+    @IBOutlet weak var A4: UIButton!
+    @IBOutlet weak var As4: UIButton!
+    @IBOutlet weak var B4: UIButton!
+    @IBOutlet weak var C4: UIButton!
+    @IBOutlet weak var Cs4: UIButton!
+    @IBOutlet weak var D4: UIButton!
+    @IBOutlet weak var Ds4: UIButton!
+    @IBOutlet weak var E4: UIButton!
+    @IBOutlet weak var F4: UIButton!
+    @IBOutlet weak var Fs4: UIButton!
+    @IBOutlet weak var G4: UIButton!
+    @IBOutlet weak var Gs4: UIButton!
+    @IBOutlet weak var A5: UIButton!
+    @IBOutlet weak var As5: UIButton!
+    @IBOutlet weak var B5: UIButton!
+    @IBOutlet weak var C5: UIButton!
+    @IBOutlet weak var Cs5: UIButton!
+    @IBOutlet weak var D5: UIButton!
+    @IBOutlet weak var Ds5: UIButton!
+    @IBOutlet weak var E5: UIButton!
+    @IBOutlet weak var F5: UIButton!
+    @IBOutlet weak var Fs5: UIButton!
+    @IBOutlet weak var G5: UIButton!
+    @IBOutlet weak var Gs5: UIButton!
+    @IBOutlet weak var A6: UIButton!
+    @IBOutlet weak var As6: UIButton!
+    @IBOutlet weak var B6: UIButton!
+    @IBOutlet weak var C6: UIButton!
+    @IBOutlet weak var Cs6: UIButton!
+    @IBOutlet weak var D6: UIButton!
+    @IBOutlet weak var Ds6: UIButton!
+    @IBOutlet weak var E6: UIButton!
+    @IBOutlet weak var F6: UIButton!
+    @IBOutlet weak var Fs6: UIButton!
+    @IBOutlet weak var G6: UIButton!
+    @IBOutlet weak var Gs6: UIButton!
+    @IBOutlet weak var A7: UIButton!
+    @IBOutlet weak var As7: UIButton!
+    @IBOutlet weak var B7: UIButton!
+    
+    
+    @IBAction func buttonTouchDown(_ sender: UIButton) {
+    /* call keyPushed() to play a sound file. */
+        keyPushed(senderTag: sender.tag)
+    }
+    
+    @IBAction func buttonTouchUpInside(_ sender: UIButton) {
+        /* call keyPushed() to stop a sound file. */
+        keyReleased(senderTag: sender.tag)
+    }
+    
+    func keyPushed(senderTag:Int){
+    /* play a sound file and emphasize the border of button to show user its activated status  */
+        print(senderTag)
+        audioPlayers[senderTag].currentTime = 0
+        audioPlayers[senderTag].play()
+        keyboardButtonList[senderTag].layer.borderWidth  = 3
+    }
+    
+    func keyReleased(senderTag:Int){
+    /* stop the sound file and restore the border of button to show user its deactivated status  */
+        print(senderTag)
+        //audioPlayers[senderTag].stop() // Commented out now because this makes some noize.
+        keyboardButtonList[senderTag].layer.borderWidth  = 1
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Line below tends to center the keyboard horizontally at the beggining, but does not work now. Please fix.
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: scrollView.contentSize.width/(-2), bottom: 0, right: 0)
+        setVariables() //Initialize the member variables.
+        prepareSound() // Set the sound files activated.
+        startBGM()  // Start the bgm file.
         
-        setVariables()
-        keyboardSet()
-        prepareSound()
-        startBGM()
+        /* Start timer to controll the change of scales along the bars.
+           relodeSoundKey will be called when the bar changes. */
         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(beat*(60/bpm)), repeats: true, block: { (timer) in
             if self.barNow == self.numberOfBar{
                 timer.invalidate()
                 print("finished!")
-                Thread.sleep(forTimeInterval: 2.0)
+                Thread.sleep(forTimeInterval: 2.0) // Just I thought users would feel uncomfortable when the view is shut down suddenly after the bgm ended...
                 self.terminateViewController()
             }else{
                 self.barNow += 1
@@ -54,214 +170,36 @@ class PlayFullKeyboardViewController: UIViewController {
         self.pathUtilityPlist = Bundle.main.path(forResource: "Utility", ofType: "plist")
         self.bgmNSDictPre = NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["bgmDict"] as! NSDictionary
         self.bgmNSDict = self.bgmNSDictPre.object(forKey:bgmTag!) as! NSDictionary
-        self.scalesNSDict = NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["scalesDict"] as! NSDictionary
-        self.pianoKeysNSArray = (NSDictionary(contentsOfFile: pathUtilityPlist! as! String)!["soundsList"] as! NSArray)
+        self.scalesNSDict = (NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["scalesDict"] as! NSDictionary)["full"] as! NSDictionary
+        self.notesNSArray = (NSDictionary(contentsOfFile: pathUtilityPlist! as! String)!["soundsList"] as! NSArray)
         self.uiParametersNSDict = NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["uiParametersDict"] as! NSDictionary
-        self.keyboardButtonList = []
         self.bpm = bgmNSDict.object(forKey:"bpm") as! Float
         self.beat = bgmNSDict.object(forKey:"beat") as! Float
         self.numberOfBar = bgmNSDict.object(forKey:"numberOfBar") as! Int
         self.barNow = 0
+        self.keyboardButtonList = [
+        UIButton(), UIButton(), UIButton(), C0, Cs0, D0, Ds0, E0, F0, Fs0, G0, Gs0,
+        A1, As1, B1, C1, Cs1, D1, Ds1, E1, F1, Fs1, G1, Gs1,
+        A2, As2, B2, C2, Cs2, D2, Ds2, E2, F2, Fs2, G2, Gs2,
+        A3, As3, B3, C3, Cs3, D3, Ds3, E3, F3, Fs3, G3, Gs3,
+        A4, As4, B4, C4, Cs4, D4, Ds4, E4, F4, Fs4, G4, Gs4,
+        A5, As5, B5, C5, Cs5, D5, Ds5, E5, F5, Fs5, G5, Gs5,
+        A6, As6, B6, C6, Cs6, D6, Ds6, E6, F6, Fs6, G6, Gs6,
+        A7, As7, B7, UIButton()]
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @objc func buttonEventSoundOn(_ sender: UIButton){
-        audioPlayers[sender.tag].currentTime = 0
-        audioPlayers[sender.tag].play()
-        switch sender.tag % 12{
-        case 0,2,3,5,7,8,10:
-            sender.layer.backgroundColor = UIColor(red: 127, green: 255, blue: 212, alpha: 1).cgColor
-        default:
-            sender.layer.backgroundColor = UIColor(red: 127, green: 255, blue: 212, alpha: 1).cgColor
-        }
-    }
-    
-    @objc func buttonEventSoundOff(_ sender: UIButton){
-        audioPlayers[sender.tag].stop()
-    }
-    
-    func keyboardSet(){
-        
-        let whiteKeyWidth = uiParametersNSDict["whiteKeyWidth"] as! Int
-        let whiteKeyHeight = uiParametersNSDict["whiteKeyWidth"] as! Int
-        let blackKeyWidth = uiParametersNSDict["blackKeyWidth"] as! Int
-        let blackKeyHeight = uiParametersNSDict["blackKeyWidth"] as! Int
-        
-        //keyboardScrollSet(whiteKeyWidth: whiteKeyWidth, whiteKeyHeight: whiteKeyHeight)
-        stackViewSet(whiteKeyWidth: whiteKeyWidth, whiteKeyHeight: whiteKeyHeight, blackKeyWidth: blackKeyWidth, blackKeyHeight: blackKeyHeight)
-        
-        //view.addSubview(keyboardViewInScroll)
-        var buttonCount:Int = 0
-        
-        for i in 0...(52*2 - 1){
-
-            let button:UIButton = UIButton()
-            
-            button.addTarget(self, action: #selector(buttonEventSoundOn(_:)), for: UIControl.Event.touchDown)
-            button.addTarget(self, action: #selector(buttonEventSoundOn(_:)), for: UIControl.Event.touchDragEnter)
-            button.addTarget(self, action: #selector(buttonEventSoundOff(_:)), for: UIControl.Event.touchUpInside)
-            button.addTarget(self, action: #selector(buttonEventSoundOff(_:)), for: UIControl.Event.touchUpOutside)
-            button.addTarget(self, action: #selector(buttonEventSoundOff(_:)), for: UIControl.Event.touchDragExit)
-            
-            switch i%14{
-            case 0,2,4,6,8,10,12:
-                button.tag = buttonCount
-                button.setTitle((pianoKeysNSArray[buttonCount] as! String), for:UIControl.State.normal)
-                button.frame = CGRect(x: 0, y: 0, width: whiteKeyWidth, height: whiteKeyHeight)
-                button.layer.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 1).cgColor
-                button.layer.borderWidth = 1.0
-                button.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-                whiteStackView.addArrangedSubview(button)
-                keyboardButtonList.append(button)
-                buttonCount += 1
-            case 1,5,7,11,13:
-                button.tag = buttonCount
-                button.setTitle((pianoKeysNSArray[buttonCount] as! String), for:UIControl.State.normal)
-                button.frame = CGRect(x: 0, y: 0, width: blackKeyWidth, height: blackKeyHeight)
-                button.layer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-                button.layer.borderWidth = 1.0
-                button.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-                blackStackView.addArrangedSubview(button)
-                keyboardButtonList.append(button)
-                buttonCount += 1
-            default:
-                button.frame = CGRect(x: 0, y: 0, width: blackKeyWidth, height: blackKeyHeight)
-                button.layer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0).cgColor
-                blackStackView.addArrangedSubview(button)
-            }
-            
-            /*
-            self.keyboardViewInScroll.addSubview(button)
-            var buttonLeadingConstraint:NSLayoutConstraint
-            let buttonTopConstraint = NSLayoutConstraint(item: button,
-                                                          attribute: NSLayoutConstraint.Attribute.top,
-                                                          relatedBy: NSLayoutConstraint.Relation.equal,
-                                                          toItem: self.keyboardViewInScroll,
-                                                          attribute: NSLayoutConstraint.Attribute.top,
-                                                          multiplier: 1.0,
-                                                          constant: 0)
-            
-            switch i % 12{
-            case 0,2,3,5,7,8,10:
-                button.frame = CGRect(x: 0, y: 0, width: whiteKeyWidth, height: whiteKeyHeight)
-                button.layer.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 1).cgColor
-                buttonLeadingConstraint = NSLayoutConstraint(item: button,
-                                                              attribute: NSLayoutConstraint.Attribute.leading,
-                                                              relatedBy: NSLayoutConstraint.Relation.equal,
-                                                              toItem: self.keyboardViewInScroll,
-                                                              attribute: NSLayoutConstraint.Attribute.leading,
-                                                              multiplier: 1.0,
-                                                              constant: CGFloat(whiteKeyWidth * whiteKeyCount))
-                self.keyboardViewInScroll.addConstraint(buttonTopConstraint)
-                self.keyboardViewInScroll.addConstraint(buttonLeadingConstraint)
-                whiteKeyCount += 1
-            default:
-                blackKeyList.append(button)
-                button.frame = CGRect(x: 0, y: 0, width: blackKeyWidth, height: blackKeyHeight)
-                button.layer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-                switch blackKeyCount % 5{
-                case 0,2,4:
-                    if blackKeyCount == 0{
-                        buttonLeadingConstraint = NSLayoutConstraint(item: button,
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     relatedBy: NSLayoutConstraint.Relation.equal,
-                                                                     toItem: self.keyboardViewInScroll,
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     multiplier: 1.0,
-                                                                     constant: CGFloat(whiteKeyWidth - (blackKeyWidth/2)))
-                        self.keyboardViewInScroll.addConstraint(buttonTopConstraint)
-                        self.keyboardViewInScroll.addConstraint(buttonLeadingConstraint)
-                        blackKeyCount += 1
-                    }else{
-                        buttonLeadingConstraint = NSLayoutConstraint(item: button,
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     relatedBy: NSLayoutConstraint.Relation.equal,
-                                                                     toItem: blackKeyList[blackKeyCount-1],
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     multiplier: 1.0,
-                                                                     constant: CGFloat(whiteKeyWidth))
-                        self.keyboardViewInScroll.addConstraint(buttonTopConstraint)
-                        self.keyboardViewInScroll.addConstraint(buttonLeadingConstraint)
-                        blackKeyCount += 1
-                    }
-                default:
-                    buttonLeadingConstraint = NSLayoutConstraint(item: button,
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     relatedBy: NSLayoutConstraint.Relation.equal,
-                                                                     toItem: blackKeyList[blackKeyCount-1],
-                                                                     attribute: NSLayoutConstraint.Attribute.leading,
-                                                                     multiplier: 1.0,
-                                                                     constant: CGFloat(whiteKeyWidth * 2))
-                    self.keyboardViewInScroll.addConstraint(buttonTopConstraint)
-                    self.keyboardViewInScroll.addConstraint(buttonLeadingConstraint)
-                    blackKeyCount += 1
-                }
-            }
-        keyboardButtonList.append(button)
-            */
-        }
-    }
-    
-    func keyboardScrollSet(whiteKeyWidth:Int, whiteKeyHeight:Int){
-        keyboardScrollView.translatesAutoresizingMaskIntoConstraints = false
-        keyboardScrollView.frame.size = CGSize(width: view.frame.width, height: 100) // height must be substituted by a var in the future.
-        keyboardScrollView.isPagingEnabled = false
-        view.addSubview(keyboardScrollView)
-        keyboardScrollView.contentSize = CGSize(width:whiteKeyWidth*45, height:whiteKeyHeight)
-        
-        let scrollViewBottomConstraint = NSLayoutConstraint(item: keyboardScrollView,
-                                                     attribute: NSLayoutConstraint.Attribute.bottom,
-                                                     relatedBy: NSLayoutConstraint.Relation.equal,
-                                                     toItem: view,
-                                                     attribute: NSLayoutConstraint.Attribute.bottom,
-                                                     multiplier: 1.0,
-                                                     constant: 50)
-        let scrollViewLeadingConstraint = NSLayoutConstraint(item: keyboardScrollView,
-                                                            attribute: NSLayoutConstraint.Attribute.leading,
-                                                            relatedBy: NSLayoutConstraint.Relation.equal,
-                                                            toItem: view,
-                                                            attribute: NSLayoutConstraint.Attribute.leading,
-                                                            multiplier: 1.0,
-                                                            constant: 0)
-        
-        view.addConstraint(scrollViewBottomConstraint)
-        view.addConstraint(scrollViewLeadingConstraint)
-        
-    }
-    
-    func stackViewSet(whiteKeyWidth:Int, whiteKeyHeight:Int, blackKeyWidth:Int, blackKeyHeight:Int){
-        //keyboardScrollView.addSubview(whiteStackView)
-        //keyboardScrollView.addSubview(blackStackView)
-        
-        view.addSubview(whiteStackView)
-        view.addSubview(blackStackView)
-        whiteStackView.translatesAutoresizingMaskIntoConstraints = false
-        whiteStackView.distribution = .fillEqually
-        whiteStackView.alignment = .fill
-        whiteStackView.spacing = 0
-        whiteStackView.leftAnchor.constraint(equalTo:  view.leftAnchor, constant: 0).isActive = true
-        whiteStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: CGFloat(-1 * blackKeyHeight)).isActive = true
-        whiteStackView.widthAnchor.constraint(equalToConstant: CGFloat(whiteKeyWidth*52)).isActive = true
-        whiteStackView.heightAnchor.constraint(equalToConstant: CGFloat(whiteKeyHeight)).isActive = true
-        
-        blackStackView.translatesAutoresizingMaskIntoConstraints = false
-        blackStackView.distribution = .fillEqually
-        blackStackView.alignment = .fill
-        blackStackView.spacing = CGFloat(whiteKeyWidth)
-        blackStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: CGFloat(whiteKeyWidth - (blackKeyWidth * 1/2))).isActive = true
-        blackStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: CGFloat(-1 * whiteKeyHeight)).isActive = true
-        blackStackView.widthAnchor.constraint(equalToConstant: CGFloat(whiteKeyWidth*52 - (whiteKeyWidth - (blackKeyWidth * 1/2)))).isActive = true
-        blackStackView.heightAnchor.constraint(equalToConstant: CGFloat(blackKeyHeight)).isActive = true
-    }
         
     func prepareSound(){
+    /* Activate the sound files for immediate play when the user push keys.
+        When a key button is pushed by user, the sound with index of the key's tab will be played. */
+    
         var audioPlayer: AVAudioPlayer! = nil
         
-        for keyNSTaggedPointerString in pianoKeysNSArray{
+        for keyNSTaggedPointerString in notesNSArray{
             let key = keyNSTaggedPointerString as! String
             let pianoSoundsNSURL = NSURL(fileURLWithPath: Bundle.main.path(forResource: "sound/\(key)", ofType: "mp3")!)
             do {
@@ -271,13 +209,13 @@ class PlayFullKeyboardViewController: UIViewController {
                 print("SoundのAVAudioPlayerインスタンス作成でエラー")
             }
             // 再生準備
-            // Do any additional setup after loading the view, typically from a nib.
             audioPlayer.prepareToPlay()
             audioPlayers.append(audioPlayer)
         }
     }
     
     func startBGM(){
+    /* Start BGM */
         let bgmFileName = bgmNSDict.object(forKey:String("title")) as! String
         let bgmNSURL = NSURL(fileURLWithPath: Bundle.main.path(forResource: "bgm/\(String(describing: bgmFileName))", ofType: "mp3")!)
         do {
@@ -291,6 +229,9 @@ class PlayFullKeyboardViewController: UIViewController {
     }
         
     func relodeSoundKey(){
+    /* Relode the scale when the ordered scale is changed.
+       The color of every key in the scale would be colored so that users can distinguish it.
+         */
         for keyboardButton in keyboardButtonList{
             switch keyboardButton.tag % 12{
             case 0,2,3,5,7,8,10:
@@ -301,25 +242,14 @@ class PlayFullKeyboardViewController: UIViewController {
         }
         
         let scaleNow:String = (bgmNSDict.object(forKey:"scalesList") as! NSArray)[barNow-1] as! String
-        // Load notes array for barNow-scale from scalesDict
         let soundNSArrayInScaleNow: NSArray = scalesNSDict.object(forKey:scaleNow) as! NSArray
-        // Convert barNow-scale NSArray-to-Array(Int)
-        var soundKeyListNow:[Int] = []
-        for soundNSString in soundNSArrayInScaleNow{
-            let sound:Int = soundNSString as! Int
-            for i in 1...8{
-                if (sound%12) * i <= 87{
-                    soundKeyListNow.append((sound%12) * i)
-                }
-            }
-        }
-        for soundKey in soundKeyListNow{
-            keyboardButtonList[soundKey].layer.backgroundColor = UIColor(red: 127, green: 255, blue: 212, alpha: 1).cgColor
+        for soundKeyNSString in soundNSArrayInScaleNow{
+            keyboardButtonList[(soundKeyNSString as! Int)].layer.backgroundColor = UIColor(red:0, green: 255, blue: 255, alpha: 1).cgColor
         }
     }
-    
     func terminateViewController(){
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+    /* Called when the bgm finished. */
+        self.presentingViewController?.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     deinit{
         print("A deinit")
