@@ -13,7 +13,7 @@
         <!--Play Scale Pad View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjam" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -244,7 +244,7 @@
         <!--Music Select View Controller-->
         <scene sceneID="Pt1-tR-sqt">
             <objects>
-                <viewController id="1wA-H6-70H" customClass="MusicSelectViewController" customModule="utjam" sceneMemberID="viewController">
+                <viewController id="1wA-H6-70H" customClass="MusicSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vfQ-Zn-lcP">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -356,7 +356,7 @@
         <!--Keyboard Type Select View Controller-->
         <scene sceneID="lZl-FG-WdT">
             <objects>
-                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjam" sceneMemberID="viewController">
+                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9vY-Ke-pfo">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
