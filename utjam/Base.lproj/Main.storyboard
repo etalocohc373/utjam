@@ -13,7 +13,7 @@
         <!--Play Scale Pad View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PlayScalePadViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -356,7 +356,7 @@
         <!--Keyboard Type Select View Controller-->
         <scene sceneID="lZl-FG-WdT">
             <objects>
-                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjamBluetooth" sceneMemberID="viewController">
+                <viewController id="e2s-eq-D7h" customClass="KeyboardTypeSelectViewController" customModule="utjamBluetooth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9vY-Ke-pfo">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2059,6 +2059,13 @@
                                     <constraint firstItem="Ejl-r0-V97" firstAttribute="leading" secondItem="ak9-cg-rCR" secondAttribute="leading" id="vS9-5l-fb7"/>
                                 </constraints>
                             </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iaa-2s-ThM">
+                                <rect key="frame" x="91" y="39" width="283" height="68"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -2153,12 +2160,13 @@
                         <outlet property="Gs4" destination="Zxv-QV-x3Z" id="Fcr-en-2a6"/>
                         <outlet property="Gs5" destination="37B-5b-VUY" id="0wc-hp-SsU"/>
                         <outlet property="Gs6" destination="OgT-l5-Zmz" id="VJ0-Cb-9in"/>
+                        <outlet property="connectionsLabel" destination="Iaa-2s-ThM" id="DeJ-Ab-QCq"/>
                         <outlet property="scrollView" destination="ak9-cg-rCR" id="ptg-iL-fhN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbL-QR-xyB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="560" y="996"/>
+            <point key="canvasLocation" x="559.97001499250382" y="996"/>
         </scene>
         <!--Play Full Keyboard View Controller-->
         <scene sceneID="JSW-gj-TEy">

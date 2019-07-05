@@ -11,7 +11,7 @@ import AVFoundation
 import MultipeerConnectivity
 
 class PlayFullKeyboardViewController: UIViewController{
-
+    
     var audioPlayers:[AVAudioPlayer] = []
     var bgmPlayer: AVAudioPlayer! = nil
     var bgmTag:String? //passed by MusicSelectView.
@@ -28,8 +28,21 @@ class PlayFullKeyboardViewController: UIViewController{
     var uiParametersNSDict:NSDictionary = [:]
     var keyboardButtonList:[UIButton] = []
     
-    @IBOutlet weak var scrollView: UIScrollView!
+    let ColorServiceType = "utjam"
     
+    let myPeerId = MCPeerID(displayName: UIDevice.current.name)
+    var serviceAdvertiser : MCNearbyServiceAdvertiser!
+    var serviceBrowser : MCNearbyServiceBrowser!
+    //public init(peer myPeerID: MCPeerID, discoveryInfo info: [String : String]?, serviceType: String)
+    
+    lazy var session : MCSession = {
+        let session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .required)
+        session.delegate = self
+        return session
+    }()
+    
+    @IBOutlet weak var connectionsLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var C0: UIButton!
     @IBOutlet weak var D0: UIButton!
@@ -118,8 +131,13 @@ class PlayFullKeyboardViewController: UIViewController{
     
     
     @IBAction func buttonTouchDown(_ sender: UIButton) {
-    /* call keyPushed() to play a sound file. */
+        /* call keyPushed() to play a sound file. */
         keyPushed(senderTag: sender.tag)
+        
+        if session.connectedPeers.count > 0 && bluetoothTag == "1" {
+            let data = String(sender.tag)
+            send(colorName: data)
+        }
     }
     
     @IBAction func buttonTouchUpInside(_ sender: UIButton) {
@@ -127,8 +145,22 @@ class PlayFullKeyboardViewController: UIViewController{
         keyReleased(senderTag: sender.tag)
     }
     
+    func send(colorName : String) {
+        NSLog("%@", "sendColor: \(colorName) to \(session.connectedPeers.count) peers")
+        
+        if session.connectedPeers.count > 0 {
+            do {
+                try self.session.send(colorName.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
+            }
+            catch let error {
+                NSLog("%@", "Error for sending: \(error)")
+            }
+        }
+        
+    }
+    
     func keyPushed(senderTag:Int){
-    /* play a sound file and emphasize the border of button to show user its activated status  */
+        /* play a sound file and emphasize the border of button to show user its activated status  */
         print(senderTag)
         audioPlayers[senderTag].currentTime = 0
         audioPlayers[senderTag].play()
@@ -136,7 +168,7 @@ class PlayFullKeyboardViewController: UIViewController{
     }
     
     func keyReleased(senderTag:Int){
-    /* stop the sound file and restore the border of button to show user its deactivated status  */
+        /* stop the sound file and restore the border of button to show user its deactivated status  */
         print(senderTag)
         //audioPlayers[senderTag].stop() // Commented out now because this makes some noize.
         keyboardButtonList[senderTag].layer.borderWidth  = 1
@@ -151,7 +183,7 @@ class PlayFullKeyboardViewController: UIViewController{
         startBGM()  // Start the bgm file.
         
         /* Start timer to controll the change of scales along the bars.
-           relodeSoundKey will be called when the bar changes. */
+         relodeSoundKey will be called when the bar changes. */
         let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(beat*(60/bpm)), repeats: true, block: { (timer) in
             if self.barNow == self.numberOfBar{
                 timer.invalidate()
@@ -163,6 +195,15 @@ class PlayFullKeyboardViewController: UIViewController{
                 self.relodeSoundKey()
             }
         })
+        
+        self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: ColorServiceType)
+        self.serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: ColorServiceType)
+        
+        self.serviceAdvertiser.delegate = self
+        self.serviceAdvertiser.startAdvertisingPeer()
+        
+        self.serviceBrowser.delegate = self
+        self.serviceBrowser.startBrowsingForPeers()
     }
     
     func setVariables(){
@@ -178,25 +219,25 @@ class PlayFullKeyboardViewController: UIViewController{
         self.numberOfBar = bgmNSDict.object(forKey:"numberOfBar") as! Int
         self.barNow = 0
         self.keyboardButtonList = [
-        UIButton(), UIButton(), UIButton(), C0, Cs0, D0, Ds0, E0, F0, Fs0, G0, Gs0,
-        A1, As1, B1, C1, Cs1, D1, Ds1, E1, F1, Fs1, G1, Gs1,
-        A2, As2, B2, C2, Cs2, D2, Ds2, E2, F2, Fs2, G2, Gs2,
-        A3, As3, B3, C3, Cs3, D3, Ds3, E3, F3, Fs3, G3, Gs3,
-        A4, As4, B4, C4, Cs4, D4, Ds4, E4, F4, Fs4, G4, Gs4,
-        A5, As5, B5, C5, Cs5, D5, Ds5, E5, F5, Fs5, G5, Gs5,
-        A6, As6, B6, C6, Cs6, D6, Ds6, E6, F6, Fs6, G6, Gs6,
-        A7, As7, B7, UIButton()]
+            UIButton(), UIButton(), UIButton(), C0, Cs0, D0, Ds0, E0, F0, Fs0, G0, Gs0,
+            A1, As1, B1, C1, Cs1, D1, Ds1, E1, F1, Fs1, G1, Gs1,
+            A2, As2, B2, C2, Cs2, D2, Ds2, E2, F2, Fs2, G2, Gs2,
+            A3, As3, B3, C3, Cs3, D3, Ds3, E3, F3, Fs3, G3, Gs3,
+            A4, As4, B4, C4, Cs4, D4, Ds4, E4, F4, Fs4, G4, Gs4,
+            A5, As5, B5, C5, Cs5, D5, Ds5, E5, F5, Fs5, G5, Gs5,
+            A6, As6, B6, C6, Cs6, D6, Ds6, E6, F6, Fs6, G6, Gs6,
+            A7, As7, B7, UIButton()]
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-        
-    func prepareSound(){
-    /* Activate the sound files for immediate play when the user push keys.
-        When a key button is pushed by user, the sound with index of the key's tab will be played. */
     
+    func prepareSound(){
+        /* Activate the sound files for immediate play when the user push keys.
+         When a key button is pushed by user, the sound with index of the key's tab will be played. */
+        
         var audioPlayer: AVAudioPlayer! = nil
         
         for keyNSTaggedPointerString in notesNSArray{
@@ -215,7 +256,7 @@ class PlayFullKeyboardViewController: UIViewController{
     }
     
     func startBGM(){
-    /* Start BGM */
+        /* Start BGM */
         let bgmFileName = bgmNSDict.object(forKey:String("title")) as! String
         let bgmNSURL = NSURL(fileURLWithPath: Bundle.main.path(forResource: "bgm/\(String(describing: bgmFileName))", ofType: "mp3")!)
         do {
@@ -227,10 +268,10 @@ class PlayFullKeyboardViewController: UIViewController{
         bgmPlayer.prepareToPlay()
         bgmPlayer.play()
     }
-        
+    
     func relodeSoundKey(){
-    /* Relode the scale when the ordered scale is changed.
-       The color of every key in the scale would be colored so that users can distinguish it.
+        /* Relode the scale when the ordered scale is changed.
+         The color of every key in the scale would be colored so that users can distinguish it.
          */
         for keyboardButton in keyboardButtonList{
             switch keyboardButton.tag % 12{
@@ -248,10 +289,82 @@ class PlayFullKeyboardViewController: UIViewController{
         }
     }
     func terminateViewController(){
-    /* Called when the bgm finished. */
+        /* Called when the bgm finished. */
         self.presentingViewController?.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
-    deinit{
-        print("A deinit")
-    }
+    /*deinit{
+     print("A deinit")
+     }*/
 }
+
+extension PlayFullKeyboardViewController : MCNearbyServiceAdvertiserDelegate {
+    
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
+        NSLog("%@", "didNotStartAdvertisingPeer: \(error)")
+    }
+    
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        NSLog("%@", "didReceiveInvitationFromPeer \(peerID)")
+        invitationHandler(true, self.session)
+    }
+    
+}
+
+extension PlayFullKeyboardViewController : MCNearbyServiceBrowserDelegate {
+    
+    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
+        NSLog("%@", "didNotStartBrowsingForPeers: \(error)")
+    }
+    
+    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
+        NSLog("%@", "foundPeer: \(peerID)")
+        NSLog("%@", "invitePeer: \(peerID)")
+        browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
+    }
+    
+    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+        NSLog("%@", "lostPeer: \(peerID)")
+    }
+    
+}
+
+extension PlayFullKeyboardViewController : MCSessionDelegate {
+    
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+        NSLog("%@", "peer \(peerID) didChangeState: \(state.rawValue)")
+        self.connectedDevicesChanged(connectedDevices:
+            session.connectedPeers.map{$0.displayName})
+    }
+    
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+        NSLog("%@", "didReceiveData: \(data)")
+        let str = String(data: data, encoding: .utf8)!
+        self.colorChanged( colorString: str)
+    }
+    
+    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+        NSLog("%@", "didReceiveStream")
+    }
+    
+    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
+        NSLog("%@", "didStartReceivingResourceWithName")
+    }
+    
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+        NSLog("%@", "didFinishReceivingResourceWithName")
+    }
+    
+    func connectedDevicesChanged(connectedDevices: [String]) {
+        OperationQueue.main.addOperation {
+            self.connectionsLabel.text = "Connections: \(connectedDevices)"
+        }
+    }
+    
+    func colorChanged(colorString: String) {
+        OperationQueue.main.addOperation {
+            self.keyPushed(senderTag: Int(colorString)!)
+        }
+    }
+    
+}
+
