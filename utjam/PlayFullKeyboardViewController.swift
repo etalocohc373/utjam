@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import MultipeerConnectivity
 
 class PlayFullKeyboardViewController: UIViewController{
     
@@ -28,7 +27,9 @@ class PlayFullKeyboardViewController: UIViewController{
     var uiParametersNSDict:NSDictionary = [:]
     var keyboardButtonList:[UIButton] = []
     
-    let ColorServiceType = "utjam"
+    let bService = BluetoothService()
+    
+    /*let ColorServiceType = "utjam"
     
     let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     var serviceAdvertiser : MCNearbyServiceAdvertiser!
@@ -39,7 +40,7 @@ class PlayFullKeyboardViewController: UIViewController{
         let session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .required)
         session.delegate = self
         return session
-    }()
+    }()*/
     
     @IBOutlet weak var connectionsLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -134,29 +135,15 @@ class PlayFullKeyboardViewController: UIViewController{
         /* call keyPushed() to play a sound file. */
         keyPushed(senderTag: sender.tag)
         
-        if session.connectedPeers.count > 0 && bluetoothTag == "1" {
+        if bluetoothTag == "1" {
             let data = String(sender.tag)
-            send(colorName: data)
+            bService.send(colorName: data)
         }
     }
     
     @IBAction func buttonTouchUpInside(_ sender: UIButton) {
         /* call keyPushed() to stop a sound file. */
         keyReleased(senderTag: sender.tag)
-    }
-    
-    func send(colorName : String) {
-        NSLog("%@", "sendColor: \(colorName) to \(session.connectedPeers.count) peers")
-        
-        if session.connectedPeers.count > 0 {
-            do {
-                try self.session.send(colorName.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
-            }
-            catch let error {
-                NSLog("%@", "Error for sending: \(error)")
-            }
-        }
-        
     }
     
     func keyPushed(senderTag:Int){
@@ -196,14 +183,15 @@ class PlayFullKeyboardViewController: UIViewController{
             }
         })
         
-        self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: ColorServiceType)
+        bService.delegate = self
+        /*self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: ColorServiceType)
         self.serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: ColorServiceType)
         
         self.serviceAdvertiser.delegate = self
         self.serviceAdvertiser.startAdvertisingPeer()
         
         self.serviceBrowser.delegate = self
-        self.serviceBrowser.startBrowsingForPeers()
+        self.serviceBrowser.startBrowsingForPeers()*/
     }
     
     func setVariables(){
@@ -292,79 +280,20 @@ class PlayFullKeyboardViewController: UIViewController{
         /* Called when the bgm finished. */
         self.presentingViewController?.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
-    /*deinit{
-     print("A deinit")
-     }*/
 }
 
-extension PlayFullKeyboardViewController : MCNearbyServiceAdvertiserDelegate {
+extension PlayFullKeyboardViewController : BluetoothServiceDelegate {
     
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        NSLog("%@", "didNotStartAdvertisingPeer: \(error)")
-    }
-    
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        NSLog("%@", "didReceiveInvitationFromPeer \(peerID)")
-        invitationHandler(true, self.session)
-    }
-    
-}
-
-extension PlayFullKeyboardViewController : MCNearbyServiceBrowserDelegate {
-    
-    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-        NSLog("%@", "didNotStartBrowsingForPeers: \(error)")
-    }
-    
-    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        NSLog("%@", "foundPeer: \(peerID)")
-        NSLog("%@", "invitePeer: \(peerID)")
-        browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
-    }
-    
-    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        NSLog("%@", "lostPeer: \(peerID)")
-    }
-    
-}
-
-extension PlayFullKeyboardViewController : MCSessionDelegate {
-    
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        NSLog("%@", "peer \(peerID) didChangeState: \(state.rawValue)")
-        self.connectedDevicesChanged(connectedDevices:
-            session.connectedPeers.map{$0.displayName})
-    }
-    
-    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        NSLog("%@", "didReceiveData: \(data)")
-        let str = String(data: data, encoding: .utf8)!
-        self.colorChanged( colorString: str)
-    }
-    
-    func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-        NSLog("%@", "didReceiveStream")
-    }
-    
-    func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-        NSLog("%@", "didStartReceivingResourceWithName")
-    }
-    
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-        NSLog("%@", "didFinishReceivingResourceWithName")
-    }
-    
-    func connectedDevicesChanged(connectedDevices: [String]) {
+    func connectedDevicesChanged(manager: BluetoothService, connectedDevices: [String]) {
         OperationQueue.main.addOperation {
             self.connectionsLabel.text = "Connections: \(connectedDevices)"
         }
     }
     
-    func colorChanged(colorString: String) {
+    func colorChanged(manager: BluetoothService, colorString: String) {
         OperationQueue.main.addOperation {
             self.keyPushed(senderTag: Int(colorString)!)
         }
     }
     
 }
-

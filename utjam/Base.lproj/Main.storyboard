@@ -207,6 +207,13 @@
                                     <constraint firstAttribute="height" constant="100" id="t3d-hJ-2sx"/>
                                 </constraints>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mh0-dA-QkO">
+                                <rect key="frame" x="131" y="68" width="283" height="68"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -219,6 +226,7 @@
                     <connections>
                         <outlet property="bottonChangeLower" destination="B3H-bc-v1q" id="8I3-58-MR2"/>
                         <outlet property="buttonChangeHigher" destination="TtV-vU-6F2" id="Ebk-Sq-9F1"/>
+                        <outlet property="connectionsLabel" destination="Mh0-dA-QkO" id="BXJ-ra-LWH"/>
                         <outlet property="keyboardLower1" destination="2sr-af-PQ4" id="yiE-ax-V5H"/>
                         <outlet property="keyboardLower2" destination="LzV-qM-tL3" id="0bp-X3-aNo"/>
                         <outlet property="keyboardLower3" destination="OZG-0C-lCb" id="oOx-AD-M2G"/>

@@ -31,6 +31,8 @@ class PlayScalePadViewController: UIViewController {
 
     @IBOutlet weak var buttonChangeHigher: UIButton!
     @IBOutlet weak var bottonChangeLower: UIButton!
+    
+    @IBOutlet weak var connectionsLabel : UILabel!
     // declare the variables to be initialized in init()
     
     var audioPlayers:[AVAudioPlayer] = []
@@ -50,6 +52,8 @@ class PlayScalePadViewController: UIViewController {
     var scalesNSDict:NSDictionary = [:]
     var pianoKeysNSArray:NSArray = []
     var uiParametersNSDict:NSDictionary = [:]
+    
+    let bService = BluetoothService()
     
     override func viewDidLoad() {
         super.viewDidLoad() 
@@ -90,6 +94,7 @@ class PlayScalePadViewController: UIViewController {
         self.scalesNSDict = (NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["scalesDict"] as! NSDictionary)["short"] as! NSDictionary
         self.pianoKeysNSArray = (NSDictionary(contentsOfFile: pathUtilityPlist! as! String)!["soundsList"] as! NSArray)
         self.uiParametersNSDict = NSDictionary(contentsOfFile:self.pathUtilityPlist! as! String)!["uiParametersDict"] as! NSDictionary
+        bService.delegate = self
     }
     
     override func didReceiveMemoryWarning() {
@@ -116,10 +121,21 @@ class PlayScalePadViewController: UIViewController {
     }
     @IBAction func keyboardTouchDown(_ sender: UIButton) {
     /* play a sound file and emphasize the border of button to show user its activated status when users push a key button. */
-        audioPlayers[sender.tag].currentTime = 0
-        audioPlayers[sender.tag].play()
-        sender.layer.borderWidth = 3
+        keyPushed(senderTag: sender.tag)
+        
+        if bluetoothTag == "1" {
+            let data = String(sender.tag)
+            bService.send(colorName: data)
+        }
     }
+    
+    func keyPushed(senderTag:Int){
+        /* play a sound file and emphasize the border of button to show user its activated status  */
+        print(senderTag)
+        audioPlayers[senderTag].currentTime = 0
+        audioPlayers[senderTag].play()
+    }
+    
     @IBAction func keyboardTouchUp(_ sender: UIButton) {
     /* Stop a sound file and restore the border of button to show user its deactivated status when users push a key button. */
         //audioPlayers[sender.tag].stop() // Commented out now because this makes some noize.
@@ -222,4 +238,20 @@ class PlayScalePadViewController: UIViewController {
     }
     
 
+}
+
+extension PlayScalePadViewController : BluetoothServiceDelegate {
+    
+    func connectedDevicesChanged(manager: BluetoothService, connectedDevices: [String]) {
+        OperationQueue.main.addOperation {
+            self.connectionsLabel.text = "Connections: \(connectedDevices)"
+        }
+    }
+    
+    func colorChanged(manager: BluetoothService, colorString: String) {
+        OperationQueue.main.addOperation {
+            self.keyPushed(senderTag: Int(colorString)!)
+        }
+    }
+    
 }
