@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		ECB8E96822CDBF8B00441304 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECB8E96722CDBF8B00441304 /* MultipeerConnectivity.framework */; };
+		ECF03F6E22D4499E003CDDF6 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF03F6D22D4499E003CDDF6 /* BluetoothService.swift */; };
 		FC006AF922C67C57000AD390 /* SingleMultiSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC006AF822C67C57000AD390 /* SingleMultiSelectViewController.swift */; };
 		FC3BAE6422BE09A40025FC2C /* bgm in Resources */ = {isa = PBXBuildFile; fileRef = FC3BAE6322BE09A40025FC2C /* bgm */; };
 		FC3BAE6722BE68A20025FC2C /* PlayScalePadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3BAE6522BE68A20025FC2C /* PlayScalePadViewController.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		ECB8E96722CDBF8B00441304 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		ECF03F6D22D4499E003CDDF6 /* BluetoothService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
 		FC006AF822C67C57000AD390 /* SingleMultiSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMultiSelectViewController.swift; sourceTree = "<group>"; };
 		FC3BAE6322BE09A40025FC2C /* bgm */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bgm; sourceTree = "<group>"; };
 		FC3BAE6522BE68A20025FC2C /* PlayScalePadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayScalePadViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				FC71C7F522B217470098D9BE /* AppDelegate.swift */,
 				FC3BAE6622BE68A20025FC2C /* PlayFullKeyboardViewController.swift */,
 				FC3BAE6522BE68A20025FC2C /* PlayScalePadViewController.swift */,
+				ECF03F6D22D4499E003CDDF6 /* BluetoothService.swift */,
 				FC71C7F922B217470098D9BE /* Main.storyboard */,
 				FC3BAE6922BE6BA70025FC2C /* KeyboardTypeSelectViewController.swift */,
 				FC73732022B4960E0058B040 /* MusicSelectViewController.swift */,
@@ -303,6 +306,7 @@
 				FC71C7F622B217470098D9BE /* AppDelegate.swift in Sources */,
 				FC006AF922C67C57000AD390 /* SingleMultiSelectViewController.swift in Sources */,
 				FCE3792222C095F100A19A81 /* CustomButton.swift in Sources */,
+				ECF03F6E22D4499E003CDDF6 /* BluetoothService.swift in Sources */,
 				FC73732122B4960E0058B040 /* MusicSelectViewController.swift in Sources */,
 				FC3BAE6A22BE6BA70025FC2C /* KeyboardTypeSelectViewController.swift in Sources */,
 			);
