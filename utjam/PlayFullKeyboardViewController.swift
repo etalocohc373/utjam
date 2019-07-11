@@ -45,7 +45,8 @@ class PlayFullKeyboardViewController: UIViewController{
     @IBOutlet weak var connectionsLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var C0: UIButton!
+    @IBOutlet var keyBtns:[UIButton] = []
+    /*@IBOutlet weak var C0: UIButton!
     @IBOutlet weak var D0: UIButton!
     @IBOutlet weak var E0: UIButton!
     @IBOutlet weak var F0: UIButton!
@@ -128,7 +129,7 @@ class PlayFullKeyboardViewController: UIViewController{
     @IBOutlet weak var Gs6: UIButton!
     @IBOutlet weak var A7: UIButton!
     @IBOutlet weak var As7: UIButton!
-    @IBOutlet weak var B7: UIButton!
+    @IBOutlet weak var B7: UIButton!*/
     
     
     @IBAction func buttonTouchDown(_ sender: UIButton) {
@@ -184,14 +185,6 @@ class PlayFullKeyboardViewController: UIViewController{
         })
         
         bService.delegate = self
-        /*self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: ColorServiceType)
-        self.serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: ColorServiceType)
-        
-        self.serviceAdvertiser.delegate = self
-        self.serviceAdvertiser.startAdvertisingPeer()
-        
-        self.serviceBrowser.delegate = self
-        self.serviceBrowser.startBrowsingForPeers()*/
     }
     
     func setVariables(){
@@ -206,7 +199,8 @@ class PlayFullKeyboardViewController: UIViewController{
         self.beat = bgmNSDict.object(forKey:"beat") as! Float
         self.numberOfBar = bgmNSDict.object(forKey:"numberOfBar") as! Int
         self.barNow = 0
-        self.keyboardButtonList = [
+        
+        /*self.keyboardButtonList = [
             UIButton(), UIButton(), UIButton(), C0, Cs0, D0, Ds0, E0, F0, Fs0, G0, Gs0,
             A1, As1, B1, C1, Cs1, D1, Ds1, E1, F1, Fs1, G1, Gs1,
             A2, As2, B2, C2, Cs2, D2, Ds2, E2, F2, Fs2, G2, Gs2,
@@ -214,7 +208,9 @@ class PlayFullKeyboardViewController: UIViewController{
             A4, As4, B4, C4, Cs4, D4, Ds4, E4, F4, Fs4, G4, Gs4,
             A5, As5, B5, C5, Cs5, D5, Ds5, E5, F5, Fs5, G5, Gs5,
             A6, As6, B6, C6, Cs6, D6, Ds6, E6, F6, Fs6, G6, Gs6,
-            A7, As7, B7, UIButton()]
+            A7, As7, B7, UIButton()]*/
+        self.keyboardButtonList = [
+            UIButton(), UIButton(), UIButton()] + keyBtns + [UIButton()]
     }
     
     override func didReceiveMemoryWarning() {
